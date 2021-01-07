@@ -1,0 +1,9 @@
+[submodule "lib/eigen"]
+	path = lib/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+[submodule "lib/pybind11"]
+	path = lib/pybind11
+	url = https://github.com/mkuron/pybind11.git
+[submodule "lib/googletest"]
+	path = lib/googletest
+	url = https://github.com/google/googletest.git
