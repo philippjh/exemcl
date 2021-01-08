@@ -3,6 +3,7 @@
 
 #include "ExemplarClusteringGPUKernels.cu"
 #include <cublas.h>
+#include <cublas_v2.h>
 #include <cuda_fp16.h>
 #include <src/CudaHelpers.cu>
 #include <src/function/SubmodularFunction.h>
