@@ -30,16 +30,19 @@ namespace exemcl::gpu {
          * @param V The ground set to operate on.
          * @param workerCount The number of workers to employ (defaults to -1, i.e. all available cores).
          */
-        explicit ExemplarClusteringSubmodularFunction(const exemcl::MatrixX<HostDataType, Eigen::ColMajor>& V, int workerCount = -1) :
-            _V(std::make_unique<exemcl::MatrixX<HostDataType, Eigen::ColMajor>>(V)) {
+        explicit ExemplarClusteringSubmodularFunction(const exemcl::MatrixX<HostDataType, Eigen::ColMajor>& V, int workerCount = -1) {
+            // Store V shape.
+            _vShape[0] = V.rows();
+            _vShape[1] = V.cols();
+
             // Copy the vMatrix on the GPU.
-            _gpuVMatrixMemoryAllocated = _V->rows() * _V->cols() * sizeof(DeviceDataType);
+            _gpuVMatrixMemoryAllocated = V.size() * sizeof(DeviceDataType);
             CUDA_CHECK_RETURN(cudaMalloc((void**) &_vMatrix, _gpuVMatrixMemoryAllocated));
             if constexpr (std::is_same<DeviceDataType, __half>::value) {
-                auto VCasted = std::make_unique<exemcl::MatrixX<HostOpDataType, Eigen::ColMajor>>(_V->template cast<HostOpDataType>());
+                auto VCasted = std::make_unique<exemcl::MatrixX<HostOpDataType, Eigen::ColMajor>>(V.template cast<HostOpDataType>());
                 CUDA_CHECK_RETURN(cudaMemcpy(_vMatrix, VCasted->data(), _gpuVMatrixMemoryAllocated, cudaMemcpyHostToDevice));
             } else {
-                CUDA_CHECK_RETURN(cudaMemcpy(_vMatrix, _V->data(), _gpuVMatrixMemoryAllocated, cudaMemcpyHostToDevice));
+                CUDA_CHECK_RETURN(cudaMemcpy(_vMatrix, V.data(), _gpuVMatrixMemoryAllocated, cudaMemcpyHostToDevice));
             }
 
             // Configure shared memory bank size accordingly.
@@ -49,17 +52,17 @@ namespace exemcl::gpu {
                 CUDA_CHECK_RETURN(cudaDeviceSetSharedMemConfig(cudaSharedMemBankSizeEightByte));
 
             // Evaluate the zero vec value.
-            auto* accuArray = new HostDataType[_V->rows()];
+            auto* accuArray = new HostDataType[V.rows()];
 #pragma omp parallel for num_threads(_workerCount)
-            for (unsigned int i = 0; i < _V->rows(); i++)
-                accuArray[i] = (-1 * _V->row(i)).squaredNorm();
+            for (unsigned int i = 0; i < V.rows(); i++)
+                accuArray[i] = (-1 * V.row(i)).squaredNorm();
 
             _zeroVecValue = 0.0;
 #pragma omp simd reduction(+ : _zeroVecValue)
-            for (unsigned int i = 0; i < _V->rows(); i++)
+            for (unsigned int i = 0; i < V.rows(); i++)
                 _zeroVecValue += accuArray[i];
             delete[] accuArray;
-            _zeroVecValue /= _V->rows();
+            _zeroVecValue /= V.rows();
 
             // Create cuBLAS handle.
             cublasCreate(&_handle);
@@ -196,8 +199,8 @@ namespace exemcl::gpu {
         };
 
     private:
-        const std::unique_ptr<MatrixX<HostDataType, Eigen::ColMajor>> _V;
         HostDataType _zeroVecValue;
+        std::array<unsigned long, 2> _vShape;
 
         // CuBLAS
         cublasHandle_t _handle;
@@ -229,7 +232,7 @@ namespace exemcl::gpu {
 
             CUDA_CHECK_RETURN(cudaMalloc((void**) &gpuSummaryMatrix, summaryMatrix->rows() * summaryMatrix->cols() * sizeof(DeviceDataType)));
             CUDA_CHECK_RETURN(cudaMalloc((void**) &gpuSummarySizes, S_multi.size() * sizeof(int)));
-            CUDA_CHECK_RETURN(cudaMalloc((void**) &gpuResultMatrix, S_multi.size() * _V->rows() * sizeof(HostDataType)));
+            CUDA_CHECK_RETURN(cudaMalloc((void**) &gpuResultMatrix, S_multi.size() * _vShape[0] * sizeof(HostDataType)));
 
             // Copy the matrices on the GPU.
             CUDA_CHECK_RETURN(cudaMemcpy(gpuSummaryMatrix, summaryMatrix->data(), summaryMatrix->rows() * summaryMatrix->cols() * sizeof(DeviceDataType), cudaMemcpyHostToDevice));
@@ -237,18 +240,18 @@ namespace exemcl::gpu {
 
             // Invoke kernel.
             if constexpr (std::is_same<DeviceDataType, __half>::value) {
-                exemplarClusteringKernel<<<kernelConf.gridDim, kernelConf.blockDim, kernelConf.sharedMemory>>>(_vMatrix, (int) _V->rows(), gpuSummaryMatrix, maxS, gpuSummarySizes,
-                                                                                                               (int) S_multi.size(), (int) _V->cols(), gpuResultMatrix);
+                exemplarClusteringKernel<<<kernelConf.gridDim, kernelConf.blockDim, kernelConf.sharedMemory>>>(_vMatrix, (int) _vShape[0], gpuSummaryMatrix, maxS, gpuSummarySizes,
+                                                                                                               (int) S_multi.size(), (int) _vShape[1], gpuResultMatrix);
             } else {
                 exemplarClusteringKernel<DeviceDataType><<<kernelConf.gridDim, kernelConf.blockDim, kernelConf.sharedMemory>>>(
-                    _vMatrix, (int) _V->rows(), gpuSummaryMatrix, maxS, gpuSummarySizes, (int) S_multi.size(), (int) _V->cols(), gpuResultMatrix);
+                    _vMatrix, (int) _vShape[0], gpuSummaryMatrix, maxS, gpuSummarySizes, (int) S_multi.size(), (int) _vShape[1], gpuResultMatrix);
             }
 
             // Copy auxiliary one vector to GPU as long as we are waiting for the result matrix to arrive.
-            VectorX<HostDataType> oneVector = VectorX<HostDataType>::Ones(_V->rows());
+            VectorX<HostDataType> oneVector = VectorX<HostDataType>::Ones(_vShape[0]);
             HostDataType* gpuOneVector;
-            CUDA_CHECK_RETURN(cudaMalloc((void**) &gpuOneVector, _V->rows() * sizeof(HostDataType)));
-            CUDA_CHECK_RETURN(cudaMemcpy(gpuOneVector, oneVector.data(), _V->rows() * sizeof(HostDataType), cudaMemcpyHostToDevice));
+            CUDA_CHECK_RETURN(cudaMalloc((void**) &gpuOneVector, _vShape[0] * sizeof(HostDataType)));
+            CUDA_CHECK_RETURN(cudaMemcpy(gpuOneVector, oneVector.data(), _vShape[0] * sizeof(HostDataType), cudaMemcpyHostToDevice));
 
             // Allocate memory for the result of the row reduction by sum.
             HostDataType* gpuRowReductionVector;
@@ -263,12 +266,12 @@ namespace exemcl::gpu {
                 float alpha = 1.0;
                 float beta = 0.0;
                 CUBLAS_CHECK_RETURN(
-                    cublasSgemv(_handle, CUBLAS_OP_N, S_multi.size(), _V->rows(), &alpha, gpuResultMatrix, S_multi.size(), gpuOneVector, 1, &beta, gpuRowReductionVector, 1));
+                    cublasSgemv(_handle, CUBLAS_OP_N, S_multi.size(), _vShape[0], &alpha, gpuResultMatrix, S_multi.size(), gpuOneVector, 1, &beta, gpuRowReductionVector, 1));
             } else if constexpr (std::is_same<HostDataType, double>::value) {
                 double alpha = 1.0;
                 double beta = 0.0;
                 CUBLAS_CHECK_RETURN(
-                    cublasDgemv(_handle, CUBLAS_OP_N, S_multi.size(), _V->rows(), &alpha, gpuResultMatrix, S_multi.size(), gpuOneVector, 1, &beta, gpuRowReductionVector, 1));
+                    cublasDgemv(_handle, CUBLAS_OP_N, S_multi.size(), _vShape[0], &alpha, gpuResultMatrix, S_multi.size(), gpuOneVector, 1, &beta, gpuRowReductionVector, 1));
             }
 
             std::vector<HostDataType> finalResultVector(S_multi.size(), 0.0);
@@ -307,7 +310,7 @@ namespace exemcl::gpu {
             int* summarySizes = new int[S_multi.size()];
 
             // Check common dim, find max |S|.
-            long dim = _V->cols();
+            long dim = _vShape[1];
             unsigned long maxS = 0;
             for (unsigned int i = 0; i < S_multi.size(); i++) {
                 if (dim != S_multi[i].cols()) {
@@ -350,14 +353,14 @@ namespace exemcl::gpu {
             CUDA_CHECK_RETURN(cudaGetDevice(&deviceNo));
             int sharedMemorySize;
             CUDA_CHECK_RETURN(cudaDeviceGetAttribute(&sharedMemorySize, cudaDevAttrMaxSharedMemoryPerBlock, deviceNo));
-            const unsigned int memoryPerV = static_cast<unsigned int>(_V->cols() * sizeof(DeviceDataType));
+            const unsigned int memoryPerV = static_cast<unsigned int>(_vShape[1] * sizeof(DeviceDataType));
 
             const unsigned int S_multi_size_2powfloored = static_cast<unsigned int>(pow(2.0, floor(log2(static_cast<HostDataType>(S_multi.size())))));
 
             const unsigned int blockDimY = std::min({threadCount, S_multi_size_2powfloored});
             const unsigned int blockDimX = std::min({static_cast<unsigned int>(floor((HostDataType) threadCount / (HostDataType) blockDimY)),
                                                      static_cast<unsigned int>(floor((HostDataType) sharedMemorySize / (HostDataType) memoryPerV))});
-            const unsigned int gridDimX = static_cast<unsigned int>(ceil(static_cast<HostDataType>(_V->rows()) / static_cast<HostDataType>(blockDimX)));
+            const unsigned int gridDimX = static_cast<unsigned int>(ceil(static_cast<HostDataType>(_vShape[0]) / static_cast<HostDataType>(blockDimX)));
             const unsigned int gridDimY = static_cast<unsigned int>(ceil(static_cast<HostDataType>(S_multi.size()) / static_cast<HostDataType>(blockDimY)));
 
             // Create kernel configuration object.
@@ -383,12 +386,12 @@ namespace exemcl::gpu {
             // Calculate total GPU memory requirements for problem solution.
             size_t memoryReqSummaryMatrix = maxS * summaryCount * dim * sizeof(DeviceDataType);
             size_t memoryReqSummarySizes = summaryCount * sizeof(int);
-            size_t memoryReqResultMatrix = summaryCount * _V->rows() * sizeof(HostDataType);
+            size_t memoryReqResultMatrix = summaryCount * _vShape[0] * sizeof(HostDataType);
             size_t memoryRequirements = memoryReqSummaryMatrix + memoryReqSummarySizes + memoryReqResultMatrix;
 
             // Calculate chunking.
             unsigned long chunkSize = static_cast<unsigned long>(
-                floor(static_cast<HostDataType>(freeGPUMemory) / static_cast<HostDataType>(maxS * dim * sizeof(DeviceDataType) + sizeof(int) + _V->rows() * sizeof(HostDataType))));
+                floor(static_cast<HostDataType>(freeGPUMemory) / static_cast<HostDataType>(maxS * dim * sizeof(DeviceDataType) + sizeof(int) + _vShape[0] * sizeof(HostDataType))));
             if (chunkSize == 0) {
                 throw std::runtime_error("ExemplarClusteringSubmodularFunction::calculateProblemDependentChunking: No memory left on GPU to evaluate the function.");
             }
