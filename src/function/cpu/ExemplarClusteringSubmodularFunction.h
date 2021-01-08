@@ -18,8 +18,9 @@ namespace exemcl::cpu {
          *
          * @param V The ground set V.
          */
-        explicit ExemplarClusteringSubmodularFunction(const MatrixX<HostDataType>& V, int workerCount = -1) : SubmodularFunction<HostDataType>(workerCount), _V(V) {
-            MatrixX<HostDataType> zeroVec = VectorX<HostDataType>::Zero(_V.cols()).transpose();
+        explicit ExemplarClusteringSubmodularFunction(const MatrixX<HostDataType>& V, int workerCount = -1) :
+            SubmodularFunction<HostDataType>(workerCount), _V(std::make_unique<MatrixX<HostDataType>>(V)) {
+            MatrixX<HostDataType> zeroVec = VectorX<HostDataType>::Zero(_V->cols()).transpose();
             _zeroVecValue = L(zeroVec);
         };
 
@@ -62,7 +63,7 @@ namespace exemcl::cpu {
 
     private:
         HostDataType _zeroVecValue;
-        const MatrixX<HostDataType>& _V;
+        const std::unique_ptr<MatrixX<HostDataType>> _V;
 
         /**
          * Calculates the L function.
@@ -71,22 +72,22 @@ namespace exemcl::cpu {
          * @return L function value.
          */
         HostDataType L(const MatrixX<HostDataType>& S_inner) const {
-            auto* accuArray = new HostDataType[_V.rows()];
+            auto* accuArray = new HostDataType[_V->rows()];
 
-            for (unsigned int i = 0; i < _V.rows(); i++) {
+            for (unsigned int i = 0; i < _V->rows(); i++) {
                 auto min_val = std::numeric_limits<HostDataType>::max();
                 for (unsigned int j = 0; j < S_inner.rows(); j++)
-                    min_val = std::min((_V.row(i) - S_inner.row(j)).squaredNorm(), min_val);
+                    min_val = std::min((_V->row(i) - S_inner.row(j)).squaredNorm(), min_val);
                 accuArray[i] = min_val;
             }
 
             HostDataType accu = 0.0;
 #pragma omp simd reduction(+ : accu)
-            for (unsigned int i = 0; i < _V.rows(); i++)
+            for (unsigned int i = 0; i < _V->rows(); i++)
                 accu += accuArray[i];
 
             delete[] accuArray;
-            return accu / static_cast<HostDataType>(_V.rows());
+            return accu / static_cast<HostDataType>(_V->rows());
         };
     };
 }
