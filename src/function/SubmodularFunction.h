@@ -17,7 +17,6 @@
  * This (abstract) class provides an interface to implementing submodular functions of any kind.
  */
 namespace exemcl {
-    template<typename HostDataType>
     class SubmodularFunction {
     public:
         /**
@@ -34,7 +33,7 @@ namespace exemcl {
          * @param S Set of vectors, to calculate the submodular function for.
          * @return The submodular function value \f$f(S)\f$.
          */
-        virtual HostDataType operator()(const MatrixX<HostDataType>& S) const = 0;
+        virtual double operator()(const MatrixX<double>& S) const = 0;
 
         /**
          * Calculates the submodular function value for a set.
@@ -42,7 +41,7 @@ namespace exemcl {
          * @param S Set of vectors, to calculate the submodular function for.
          * @return The submodular function value \f$f(S)\f$.
          */
-        virtual HostDataType operator()(const MatrixX<HostDataType>& S) = 0;
+        virtual double operator()(const MatrixX<double>& S) = 0;
 
         /**
          * Calculates the marginal gain of the submodular function, w.r.t to \f$S\f$ and a marginal element \f$e\f$.
@@ -50,9 +49,9 @@ namespace exemcl {
          * @param elem A marginal element.
          * @return The marginal gain of the \f$f(S) - f(S \cup \left\{elem\right\})\f$
          */
-        virtual HostDataType operator()(const MatrixX<HostDataType>& S, VectorXRef<HostDataType> elem) const {
+        virtual double operator()(const MatrixX<double>& S, VectorXRef<double> elem) const {
             if (S.cols() == elem.size()) {
-                std::unique_ptr<MatrixX<HostDataType>> S_elem = std::make_unique<MatrixX<HostDataType>>(S);
+                std::unique_ptr<MatrixX<double>> S_elem = std::make_unique<MatrixX<double>>(S);
                 S_elem->conservativeResize(S.rows() + 1, Eigen::NoChange_t());
                 S_elem->row(S.rows()) << elem.transpose();
 
@@ -72,7 +71,7 @@ namespace exemcl {
          * @param elem A marginal element.
          * @return The marginal gain of the \f$f(S) - f(S \cup \left\{elem\right\})\f$
          */
-        virtual HostDataType operator()(const MatrixX<HostDataType>& S, VectorXRef<HostDataType> elem) {
+        virtual double operator()(const MatrixX<double>& S, VectorXRef<double> elem) {
             return ((const SubmodularFunction*) (this))->operator()(S, elem);
         }
 
@@ -82,9 +81,9 @@ namespace exemcl {
          * @param S_multi A set of sets \f$ S = \left\{S_1, ..., S_n\right\}\f$, which should be evaluated using the submodular function.
          * @return A set of utility values \f$\left\{f(S_1), ..., f(S_n)\right\}\f$.
          */
-        virtual std::vector<HostDataType> operator()(const std::vector<MatrixX<HostDataType>>& S_multi) const {
+        virtual std::vector<double> operator()(const std::vector<MatrixX<double>>& S_multi) const {
             // Construct vector for storing utilities.
-            std::vector<HostDataType> utilities;
+            std::vector<double> utilities;
             utilities.resize(S_multi.size());
 
             // Calculate utilities.
@@ -102,7 +101,7 @@ namespace exemcl {
          * @param S_multi A set of sets \f$ S = \left\{S_1, ..., S_n\right\}\f$, which should be evaluated using the submodular function.
          * @return A set of utility values \f$\left\{f(S_1), ..., f(S_n)\right\}\f$.
          */
-        virtual std::vector<HostDataType> operator()(const std::vector<MatrixX<HostDataType>>& S_multi) {
+        virtual std::vector<double> operator()(const std::vector<MatrixX<double>>& S_multi) {
             return ((const SubmodularFunction*) (this))->operator()(S_multi);
         };
 
@@ -113,8 +112,8 @@ namespace exemcl {
          * @param elem A marginal element \f$ e \f$.
          * @return A set of marginal gain values \f$\Delta_f(e | S_1), ..., \Delta_f(e | S_n) \f$.
          */
-        virtual std::vector<HostDataType> operator()(const std::vector<MatrixX<HostDataType>>& S_multi, VectorXRef<HostDataType> elem) const {
-            auto S_multi_elem = std::make_unique<std::vector<MatrixX<HostDataType>>>();
+        virtual std::vector<double> operator()(const std::vector<MatrixX<double>>& S_multi, VectorXRef<double> elem) const {
+            auto S_multi_elem = std::make_unique<std::vector<MatrixX<double>>>();
             S_multi_elem->reserve(S_multi.size());
 
             // Create a new S_multi set, but include the marginal vector.
@@ -129,7 +128,7 @@ namespace exemcl {
             auto utilityS_multi_elem = operator()(*S_multi_elem);
 
             // Calculate the difference between the utilities of S_multi_elem and S_multi.
-            std::vector<HostDataType> marginalGains;
+            std::vector<double> marginalGains;
             marginalGains.resize(S_multi.size());
 
             for (unsigned long i = 0; i < utilityS_multi.size(); i++)
@@ -145,7 +144,7 @@ namespace exemcl {
          * @param elem A marginal element \f$ e \f$.
          * @return A set of marginal gain values \f$\Delta_f(e | S_1), ..., \Delta_f(e | S_n) \f$.
          */
-        virtual std::vector<HostDataType> operator()(const std::vector<MatrixX<HostDataType>>& S_multi, VectorXRef<HostDataType> elem) {
+        virtual std::vector<double> operator()(const std::vector<MatrixX<double>>& S_multi, VectorXRef<double> elem) {
             return ((const SubmodularFunction*) (this))->operator()(S_multi, elem);
         }
 
@@ -156,9 +155,9 @@ namespace exemcl {
          * @param elems A set of marginal vectors \f$ \left\{e_1, ..., e_n \right\}\f$.
          * @return A set of marginal gain values \f$\Delta_f(e_1 | S), ..., \Delta_f(e_n | S) \f$.
          */
-        virtual std::vector<HostDataType> operator()(const MatrixX<HostDataType>& S, std::vector<VectorXRef<HostDataType>> elems) const {
+        virtual std::vector<double> operator()(const MatrixX<double>& S, std::vector<VectorXRef<double>> elems) const {
             // Create a vector, which will hold {S u e_1}, ..., {S u e_n}
-            auto S_elems = std::make_unique<std::vector<MatrixX<HostDataType>>>(elems.size(), S);
+            auto S_elems = std::make_unique<std::vector<MatrixX<double>>>(elems.size(), S);
 
             // Build {S u e_1}, ..., {S u e_n}.
             for (unsigned int i = 0; i < elems.size(); i++) {
@@ -174,7 +173,7 @@ namespace exemcl {
             auto S_elems_funcValue = operator()(*S_elems);
 
             // Create a result vector.
-            std::vector<HostDataType> gains;
+            std::vector<double> gains;
             gains.resize(elems.size());
 
             // Fill the results.
@@ -191,7 +190,7 @@ namespace exemcl {
          * @param elems A set of marginal vectors \f$ \left\{e_1, ..., e_n \right\}\f$.
          * @return A set of marginal gain values \f$\Delta_f(e_1 | S), ..., \Delta_f(e_n | S) \f$.
          */
-        virtual std::vector<HostDataType> operator()(const MatrixX<HostDataType>& S, std::vector<VectorXRef<HostDataType>> elems) {
+        virtual std::vector<double> operator()(const MatrixX<double>& S, std::vector<VectorXRef<double>> elems) {
             return ((const SubmodularFunction*) (this))->operator()(std::move(S), std::move(elems));
         }
 

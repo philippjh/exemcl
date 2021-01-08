@@ -9,9 +9,9 @@ namespace exemcl::cpu {
      * This class provides a CPU implementation of the submodular function of exemplar-based clustering.
      */
     template<typename HostDataType = float>
-    class ExemplarClusteringSubmodularFunction : public SubmodularFunction<HostDataType> {
+    class ExemplarClusteringSubmodularFunction : public SubmodularFunction {
     public:
-        using SubmodularFunction<HostDataType>::operator();
+        using SubmodularFunction::operator();
 
         /**
          * Constructs the exemplar clustering submodular function using a ground set V.
@@ -19,7 +19,7 @@ namespace exemcl::cpu {
          * @param V The ground set V.
          */
         explicit ExemplarClusteringSubmodularFunction(const MatrixX<HostDataType>& V, int workerCount = -1) :
-            SubmodularFunction<HostDataType>(workerCount), _V(std::make_unique<MatrixX<HostDataType>>(V)) {
+            SubmodularFunction(workerCount), _V(std::make_unique<MatrixX<HostDataType>>(V)) {
             MatrixX<HostDataType> zeroVec = VectorX<HostDataType>::Zero(_V->cols()).transpose();
             _zeroVecValue = L(zeroVec);
         };
@@ -30,7 +30,7 @@ namespace exemcl::cpu {
          * @param S The set to evaluate.
          * @return The submodular function value.
          */
-        HostDataType operator()(const MatrixX<HostDataType>& S) override {
+        double operator()(const MatrixX<double>& S) override {
             return ((const ExemplarClusteringSubmodularFunction*) (this))->operator()(S);
         };
 
@@ -40,8 +40,8 @@ namespace exemcl::cpu {
          * @param S The set to evaluate.
          * @return The submodular function value.
          */
-        HostDataType operator()(const MatrixX<HostDataType>& S) const override {
-            auto S_copy = std::make_unique<MatrixX<HostDataType>>(S);
+        double operator()(const MatrixX<double>& S) const override {
+            auto S_copy = std::make_unique<MatrixX<HostDataType>>(S.cast<HostDataType>());
 
             // Add zero vector to data copy.
             S_copy->conservativeResize(S_copy->rows() + 1, Eigen::NoChange_t());

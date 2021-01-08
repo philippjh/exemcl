@@ -11,30 +11,48 @@
 namespace py = pybind11;
 using namespace exemcl;
 
-template<typename HostDataType, typename DeviceDataType>
-std::shared_ptr<SubmodularFunction<HostDataType>> constructFunction(const MatrixX<HostDataType>& V, const std::string& dev) {
-    if (dev == "gpu")
-        return std::shared_ptr<SubmodularFunction<HostDataType>>(new gpu::ExemplarClusteringSubmodularFunction<DeviceDataType, HostDataType>(V));
-    else if (dev == "cpu")
-        return std::shared_ptr<SubmodularFunction<HostDataType>>(new cpu::ExemplarClusteringSubmodularFunction<HostDataType>(V));
-    else
-        throw std::runtime_error("ExemCl: Construction failed. Unknown device '" + dev + "' provided. Choose either 'gpu' or 'cpu'.");
+std::shared_ptr<SubmodularFunction> constructFunction(const MatrixX<double>& V, const std::string& precision, const std::string& dev, int workerCount) {
+    if (precision == "fp16") {
+        // -----------------
+        // FP16 CONSTRUCTION
+        // -----------------
+        if (dev == "gpu")
+            return std::shared_ptr<SubmodularFunction>(new gpu::ExemplarClusteringSubmodularFunction<__half, float>(V.cast<float>(), workerCount));
+        else if (dev == "cpu")
+            throw std::runtime_error("ExemCl: Construction failed. FP16 precision is not available on CPUs.");
+        else
+            throw std::runtime_error("ExemCl: Construction failed. Unknown device '" + dev + "' provided. Choose either 'gpu' or 'cpu'.");
+    } else if (precision == "fp32") {
+        // -----------------
+        // FP32 CONSTRUCTION
+        // -----------------
+        if (dev == "gpu")
+            return std::shared_ptr<SubmodularFunction>(new gpu::ExemplarClusteringSubmodularFunction<float, float>(V.cast<float>(), workerCount));
+        else if (dev == "cpu")
+            return std::shared_ptr<SubmodularFunction>(new cpu::ExemplarClusteringSubmodularFunction<float>(V.cast<float>(), workerCount));
+        else
+            throw std::runtime_error("ExemCl: Construction failed. Unknown device '" + dev + "' provided. Choose either 'gpu' or 'cpu'.");
+    } else if (precision == "fp64") {
+        // -----------------
+        // FP64 CONSTRUCTION
+        // -----------------
+        if (dev == "gpu")
+            return std::shared_ptr<SubmodularFunction>(new gpu::ExemplarClusteringSubmodularFunction<double, double>(V, workerCount));
+        else if (dev == "cpu")
+            return std::shared_ptr<SubmodularFunction>(new cpu::ExemplarClusteringSubmodularFunction<double>(V, workerCount));
+        else
+            throw std::runtime_error("ExemCl: Construction failed. Unknown device '" + dev + "' provided. Choose either 'gpu' or 'cpu'.");
+    } else
+        throw std::runtime_error("ExemCl: Construction failed. Unknown precision '" + precision + "' provided. Choose either 'fp16', 'fp32' or 'fp64'.");
 }
 
 PYBIND11_MODULE(exemcl, m) {
     m.doc() = "exemcl python plugin";
 
-    auto m_fp16 = m.def_submodule("fp16");
-    auto m_fp32 = m.def_submodule("fp32");
-    auto m_fp64 = m.def_submodule("fp64");
-
-    py::class_<exemcl::SubmodularFunction<float>, std::shared_ptr<SubmodularFunction<float>>>(m_fp16, "ExemplarClustering")
-        .def(py::init<>(&constructFunction<float, __half>), py::arg("ground_set"), py::arg("device") = "gpu");
-    py::class_<SubmodularFunction<float>, std::shared_ptr<SubmodularFunction<float>>>(m_fp32, "ExemplarClustering")
-        .def(py::init<>(&constructFunction<float, float>), py::arg("ground_set"), py::arg("device") = "gpu")
-        .def("__call__", py::overload_cast<const MatrixX<float>&>(&SubmodularFunction<float>::operator()), py::arg("S"));
-    py::class_<SubmodularFunction<double>, std::shared_ptr<SubmodularFunction<double>>>(m_fp64, "ExemplarClustering")
-        .def(py::init<>(&constructFunction<double, double>), py::arg("ground_set"), py::arg("device") = "gpu");
+    py::class_<SubmodularFunction, std::shared_ptr<SubmodularFunction>>(m, "ExemplarClustering")
+        .def(py::init<>(&constructFunction), py::arg("ground_set"), py::arg("precision") = "fp32", py::arg("device") = "gpu", py::arg("worker_count") = -1)
+        .def("__call__", py::overload_cast<const MatrixX<double>&>(&SubmodularFunction::operator()), py::arg("S"))
+        .def("__call__", py::overload_cast<const std::vector<MatrixX<double>>&>(&SubmodularFunction::operator()), py::arg("S_multi"));
 }
 
 #endif // EXEMCL_PYTHONBINDING_H

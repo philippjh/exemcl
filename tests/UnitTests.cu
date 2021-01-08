@@ -11,27 +11,25 @@
 std::string TESTFILES_ROOT(EXEMCL_TESTFILES_DIR);
 #endif
 
-template<typename HostDataType>
 struct SubmodularTestData {
-    exemcl::MatrixX<HostDataType> groundSet;
-    std::vector<exemcl::MatrixX<HostDataType>> subsets;
+    exemcl::MatrixX<double> groundSet;
+    std::vector<exemcl::MatrixX<double>> subsets;
 
-    exemcl::VectorX<HostDataType> fValuesExpected;
-    exemcl::VectorX<HostDataType> marginalsExpected;
+    exemcl::VectorX<double> fValuesExpected;
+    exemcl::VectorX<double> marginalsExpected;
 
-    exemcl::VectorX<HostDataType> marginal;
+    exemcl::VectorX<double> marginal;
 };
 
-template<typename HostDataType>
-SubmodularTestData<HostDataType> loadSubmodularTestData(const std::string& subdir) {
-    SubmodularTestData<HostDataType> testData;
+SubmodularTestData loadSubmodularTestData(const std::string& subdir) {
+    SubmodularTestData testData;
 
     // Load test data.
-    testData.groundSet = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/ground_set.csv", ',')->asMatrix().cast<HostDataType>();
-    exemcl::MatrixX<HostDataType> subsetsMatrix = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/subsets.csv", ',')->asMatrix().cast<HostDataType>();
-    std::vector<std::vector<exemcl::VectorX<HostDataType>>> subsetVectors;
+    testData.groundSet = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/ground_set.csv", ',')->asMatrix().cast<double>();
+    exemcl::MatrixX<double> subsetsMatrix = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/subsets.csv", ',')->asMatrix().cast<double>();
+    std::vector<std::vector<exemcl::VectorX<double>>> subsetVectors;
     for (unsigned int i = 0; i < subsetsMatrix.rows(); i++) {
-        exemcl::VectorX<HostDataType> matrixRow = subsetsMatrix.row(i);
+        exemcl::VectorX<double> matrixRow = subsetsMatrix.row(i);
         unsigned int subsetIdx = matrixRow[subsetsMatrix.cols() - 1];
         if (subsetIdx >= subsetVectors.size())
             subsetVectors.emplace_back();
@@ -40,21 +38,20 @@ SubmodularTestData<HostDataType> loadSubmodularTestData(const std::string& subdi
 
     // Create subsets.
     for (auto& subset : subsetVectors) {
-        exemcl::MatrixX<HostDataType> subsetMatrix(subset.size(), testData.groundSet.cols());
+        exemcl::MatrixX<double> subsetMatrix(subset.size(), testData.groundSet.cols());
         for (unsigned int i = 0; i < subset.size(); i++)
             subsetMatrix.row(i) = subset[i];
         testData.subsets.push_back(subsetMatrix);
     }
 
-    testData.fValuesExpected = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/f_values.csv", ',')->asMatrix().col(0).cast<HostDataType>();
-    testData.marginalsExpected = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/marginal_values.csv", ',')->asMatrix().col(0).cast<HostDataType>();
+    testData.fValuesExpected = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/f_values.csv", ',')->asMatrix().col(0).cast<double>();
+    testData.marginalsExpected = CSVFile::readCSVFile(TESTFILES_ROOT + subdir + "/marginal_values.csv", ',')->asMatrix().col(0).cast<double>();
     testData.marginal = testData.groundSet.row(testData.groundSet.rows() - 1);
 
     return testData;
 }
 
-template<typename HostDataType>
-void testSubmodularFunction(exemcl::SubmodularFunction<HostDataType>& submodularFunction, SubmodularTestData<HostDataType>& testData, HostDataType tolerancy) {
+void testSubmodularFunction(exemcl::SubmodularFunction& submodularFunction, SubmodularTestData& testData, double tolerancy) {
     // Test for correct individual evaluation.
     for (unsigned long i = 0; i < testData.subsets.size(); i++)
         EXPECT_NEAR(testData.fValuesExpected(i), submodularFunction(testData.subsets[i]), tolerancy);
@@ -74,17 +71,17 @@ void testSubmodularFunction(exemcl::SubmodularFunction<HostDataType>& submodular
         EXPECT_NEAR(testData.marginalsExpected(i), marginalsComputedJoint[i], tolerancy);
 
     // Test for correct multiple marginals.
-    exemcl::MatrixX<HostDataType> emptySet(0, testData.groundSet.cols());
+    exemcl::MatrixX<double> emptySet(0, testData.groundSet.cols());
     for (auto& S : testData.subsets) {
-        std::vector<HostDataType> individualGains;
-        std::vector<exemcl::VectorXRef<HostDataType>> marginalsTested;
+        std::vector<double> individualGains;
+        std::vector<exemcl::VectorXRef<double>> marginalsTested;
         for (unsigned int i = 0; i < S.rows(); i++) {
-            exemcl::VectorXRef<HostDataType> marginal = S.row(i);
+            exemcl::VectorXRef<double> marginal = S.row(i);
             individualGains.push_back(submodularFunction(emptySet, marginal));
             marginalsTested.push_back(marginal);
         }
 
-        std::vector<HostDataType> totalGains = submodularFunction(emptySet, marginalsTested);
+        std::vector<double> totalGains = submodularFunction(emptySet, marginalsTested);
 
         EXPECT_EQ(individualGains.size(), totalGains.size());
         for (unsigned int i = 0; i < individualGains.size(); i++)
@@ -104,10 +101,10 @@ TYPED_TEST_SUITE(GPUTests, DeviceDataTypes);
 TYPED_TEST(GPUTests, ExemplarClusteringST) {
     if constexpr (std::is_same<TypeParam, float>::value || std::is_same<TypeParam, double>::value) {
         // Load test data.
-        SubmodularTestData<TypeParam> testData = loadSubmodularTestData<TypeParam>("exem");
+        SubmodularTestData testData = loadSubmodularTestData("exem");
 
         // Create submodular function.
-        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet, 1);
+        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet.cast<TypeParam>(), 1);
 
         // Run the test function.
         if constexpr (std::is_same<TypeParam, float>::value)
@@ -116,10 +113,10 @@ TYPED_TEST(GPUTests, ExemplarClusteringST) {
             testSubmodularFunction(submodularFunction, testData, FP64_ERROR_TOLERANCY);
     } else if constexpr (std::is_same<TypeParam, __half>::value) {
         // Load test data.
-        SubmodularTestData<float> testData = loadSubmodularTestData<float>("exem");
+        SubmodularTestData testData = loadSubmodularTestData("exem");
 
         // Create submodular function.
-        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet, 1);
+        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet.cast<float>(), 1);
 
         // Run the test function.
         testSubmodularFunction(submodularFunction, testData, FP16_ERROR_TOLERANCY);
@@ -129,10 +126,10 @@ TYPED_TEST(GPUTests, ExemplarClusteringST) {
 TYPED_TEST(GPUTests, ExemplarClusteringMT) {
     if constexpr (std::is_same<TypeParam, float>::value || std::is_same<TypeParam, double>::value) {
         // Load test data.
-        SubmodularTestData<TypeParam> testData = loadSubmodularTestData<TypeParam>("exem");
+        SubmodularTestData testData = loadSubmodularTestData("exem");
 
         // Create submodular function.
-        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet, -1);
+        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet.cast<TypeParam>(), -1);
 
         // Run the test function.
         if constexpr (std::is_same<TypeParam, float>::value)
@@ -141,10 +138,10 @@ TYPED_TEST(GPUTests, ExemplarClusteringMT) {
             testSubmodularFunction(submodularFunction, testData, FP64_ERROR_TOLERANCY);
     } else if constexpr (std::is_same<TypeParam, __half>::value) {
         // Load test data.
-        SubmodularTestData<float> testData = loadSubmodularTestData<float>("exem");
+        SubmodularTestData testData = loadSubmodularTestData("exem");
 
         // Create submodular function.
-        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet, -1);
+        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet.cast<float>(), -1);
 
         // Run the test function.
         testSubmodularFunction(submodularFunction, testData, FP16_ERROR_TOLERANCY);
@@ -154,10 +151,10 @@ TYPED_TEST(GPUTests, ExemplarClusteringMT) {
 TYPED_TEST(GPUTests, ExemplarClusteringChunked) {
     if constexpr (std::is_same<TypeParam, float>::value || std::is_same<TypeParam, double>::value) {
         // Load test data.
-        SubmodularTestData<TypeParam> testData = loadSubmodularTestData<TypeParam>("exem");
+        SubmodularTestData testData = loadSubmodularTestData("exem");
 
         // Create submodular function.
-        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet, 1);
+        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet.cast<TypeParam>(), 1);
         submodularFunction.setGPUMemoryLimit(100 * 1024); // 100 KiB
 
         // Run the test function.
@@ -167,10 +164,10 @@ TYPED_TEST(GPUTests, ExemplarClusteringChunked) {
             testSubmodularFunction(submodularFunction, testData, FP64_ERROR_TOLERANCY);
     } else if constexpr (std::is_same<TypeParam, __half>::value) {
         // Load test data.
-        SubmodularTestData<float> testData = loadSubmodularTestData<float>("exem");
+        SubmodularTestData testData = loadSubmodularTestData("exem");
 
         // Create submodular function.
-        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet, 1);
+        exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet.cast<float>(), 1);
         submodularFunction.setGPUMemoryLimit(100 * 1024); // 100 KiB
 
         // Run the test function.
@@ -185,10 +182,10 @@ TYPED_TEST_SUITE(CPUTests, HostDataTypes);
 
 TYPED_TEST(CPUTests, ExemplarClusteringST) {
     // Load test data.
-    SubmodularTestData<TypeParam> testData = loadSubmodularTestData<TypeParam>("exem");
+    SubmodularTestData testData = loadSubmodularTestData("exem");
 
     // Create submodular function.
-    exemcl::cpu::ExemplarClusteringSubmodularFunction<TypeParam> submodularFunction(testData.groundSet, 1);
+    exemcl::cpu::ExemplarClusteringSubmodularFunction<TypeParam> submodularFunction(testData.groundSet.cast<TypeParam>(), 1);
 
     // Run the test function.
     if constexpr (std::is_same<TypeParam, float>::value)
@@ -199,10 +196,10 @@ TYPED_TEST(CPUTests, ExemplarClusteringST) {
 
 TYPED_TEST(CPUTests, ExemplarClusteringMT) {
     // Load test data.
-    SubmodularTestData<TypeParam> testData = loadSubmodularTestData<TypeParam>("exem");
+    SubmodularTestData testData = loadSubmodularTestData("exem");
 
     // Create submodular function.
-    exemcl::cpu::ExemplarClusteringSubmodularFunction<TypeParam> submodularFunction(testData.groundSet, -1);
+    exemcl::cpu::ExemplarClusteringSubmodularFunction<TypeParam> submodularFunction(testData.groundSet.cast<TypeParam>(), -1);
 
     // Run the test function.
     if constexpr (std::is_same<TypeParam, float>::value)

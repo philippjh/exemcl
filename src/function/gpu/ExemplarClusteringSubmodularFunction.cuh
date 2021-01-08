@@ -13,10 +13,10 @@ namespace exemcl::gpu {
      * This class provides a GPU implementation of the submodular function of Exemplar-based clustering.
      */
     template<typename DeviceDataType = float, typename HostDataType = float>
-    class ExemplarClusteringSubmodularFunction : public SubmodularFunction<HostDataType> {
+    class ExemplarClusteringSubmodularFunction : public SubmodularFunction {
     public:
-        using SubmodularFunction<HostDataType>::operator();
-        using SubmodularFunction<HostDataType>::_workerCount;
+        using SubmodularFunction::operator();
+        using SubmodularFunction::_workerCount;
         static_assert((std::is_same<HostDataType, float>::value && std::is_same<DeviceDataType, __half>::value)
                           || (std::is_same<HostDataType, float>::value && std::is_same<DeviceDataType, float>::value)
                           || (std::is_same<HostDataType, double>::value && std::is_same<DeviceDataType, double>::value),
@@ -74,8 +74,11 @@ namespace exemcl::gpu {
          * @param S_multi The set of sets, which should be evaluated for their respective function value.
          * @return A list of function values one for each set in `S_multi`.
          */
-        std::vector<HostDataType> operator()(const std::vector<MatrixX<HostDataType>>& S_multi) const override {
-            auto S_multi_copy = std::make_unique<std::vector<MatrixX<HostDataType>>>(S_multi);
+        std::vector<double> operator()(const std::vector<MatrixX<double>>& S_multi) const override {
+            auto S_multi_copy = std::make_unique<std::vector<MatrixX<HostDataType>>>();
+            S_multi_copy->reserve(S_multi.size());
+            for (auto& S : S_multi)
+                S_multi_copy->push_back(S.cast<HostDataType>());
 
             // Add the zero vector to all summaries.
             unsigned long maxS = 0;
@@ -101,7 +104,7 @@ namespace exemcl::gpu {
                 size_t totalGPUMemoryReq = std::get<0>(chunking);
 
                 // Calculate the function values.
-                std::vector<HostDataType> multiSummaryValues;
+                std::vector<double> multiSummaryValues;
                 if (freeGPUMemory >= totalGPUMemoryReq) {
                     // If enough memory is available, we will just compute the function for every summary.
                     multiSummaryValues = L(*S_multi_copy);
@@ -141,7 +144,7 @@ namespace exemcl::gpu {
          * @param S_multi The set of sets, which should be evaluated for their respective function value.
          * @return A list of function values one for each set in `S_multi`.
          */
-        std::vector<HostDataType> operator()(const std::vector<MatrixX<HostDataType>>& S_multi) override {
+        std::vector<double> operator()(const std::vector<MatrixX<double>>& S_multi) override {
             return ((const ExemplarClusteringSubmodularFunction*) (this))->operator()(S_multi);
         };
 
@@ -150,15 +153,15 @@ namespace exemcl::gpu {
          * @param S The dataset to evaluate for its function value.
          * @return The function value.
          */
-        HostDataType operator()(const MatrixX<HostDataType>& S) const override {
+        double operator()(const MatrixX<double>& S) const override {
             if (S.rows() > 0) {
-                MatrixX<HostDataType> S_copy = S;
+                auto S_copy = std::make_unique<MatrixX<HostDataType>>(S.cast<HostDataType>());
 
                 // Create the zero vector and add it to the summary to evaluate.
-                S_copy.conservativeResize(S_copy.rows() + 1, S_copy.cols());
-                S_copy.row(S_copy.rows() - 1).setZero();
+                S_copy->conservativeResize(S_copy->rows() + 1, Eigen::NoChange_t());
+                S_copy->row(S_copy->rows() - 1).setZero();
 
-                return _zeroVecValue - L(S_copy);
+                return _zeroVecValue - L(*S_copy);
             } else
                 return 0.0;
         };
@@ -168,7 +171,7 @@ namespace exemcl::gpu {
          * @param S The dataset to evaluate for its function value.
          * @return The function value.
          */
-        HostDataType operator()(const MatrixX<HostDataType>& S) override {
+        double operator()(const MatrixX<double>& S) override {
             return ((const ExemplarClusteringSubmodularFunction*) (this))->operator()(S);
         };
 
@@ -216,7 +219,7 @@ namespace exemcl::gpu {
          * @param S_multi The set of sets, which should be evaluated for their respective `L` function value.
          * @return A list of `L` function values one for each set in `S_multi`.
          */
-        std::vector<HostDataType> L(std::vector<MatrixX<HostDataType>>& S_multi) const {
+        std::vector<double> L(std::vector<MatrixX<HostDataType>>& S_multi) const {
             // Build the summary matrix.
             Eigen::Matrix<HostOpDataType, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>* summaryMatrix;
             int* summarySizes;
@@ -287,7 +290,13 @@ namespace exemcl::gpu {
             CUDA_CHECK_RETURN(cudaFree(gpuOneVector));
             CUDA_CHECK_RETURN(cudaFree(gpuRowReductionVector));
 
-            return finalResultVector;
+            // Check, whether we have to cast float to double.
+            if constexpr (std::is_same<HostDataType, double>::value) {
+                return finalResultVector;
+            } else if constexpr (std::is_same<HostDataType, float>::value) {
+                std::vector<double> finalResultVectorFloat(finalResultVector.begin(), finalResultVector.end());
+                return finalResultVectorFloat;
+            }
         };
 
         HostDataType L(const MatrixX<HostDataType>& S) const {
