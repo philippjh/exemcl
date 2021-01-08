@@ -2,7 +2,6 @@
 #define EXEMCL_CUDAHELPERS_H_
 
 #include <cuda_runtime.h>
-#include <cudnn.h>
 #include <cusolverDn.h>
 #include <iostream>
 
