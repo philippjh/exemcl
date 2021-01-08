@@ -40,14 +40,14 @@ namespace exemcl::cpu {
          * @return The submodular function value.
          */
         HostDataType operator()(const MatrixX<HostDataType>& S) const override {
-            MatrixX<HostDataType> S_copy = S;
+            auto S_copy = std::make_unique<MatrixX<HostDataType>>(S);
 
             // Add zero vector to data copy.
-            S_copy.conservativeResize(S_copy.rows() + 1, S_copy.cols());
-            S_copy.row(S_copy.rows() - 1).setZero();
+            S_copy->conservativeResize(S_copy->rows() + 1, Eigen::NoChange_t());
+            S_copy->row(S_copy->rows() - 1).setZero();
 
             // Make calculations.
-            HostDataType L_2 = L(S_copy);
+            HostDataType L_2 = L(*S_copy);
 
             return _zeroVecValue - L_2;
         };
