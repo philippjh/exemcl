@@ -5,18 +5,18 @@
 #include <thread>
 #include <utility>
 
-/**
- * Submodular functions represent a special kind of set function, which map subsets (usually denoted as \f$S\f$) of some ground set
- * (denoted by \f$V\f$) to a positive real value (sometimes called the "utility"), whilst maintaining a property of diminishing returns.
- *
- * Formally, we have the ground set \f$V \subset \mathbb{R} \f$ and a function \f$f: \mathcal{P}(V) \rightarrow \mathbb{R}^+\f$.
- * The function \f$f\f$ is now submodular, iff \f$\Delta_f(e \mid A) \geq \Delta_f(e \mid B)\f$ for arbitrary \f$A \subseteq B \subseteq V\f$ and \f$e \in V \setminus B\f$.
- * The vector \f$e\f$ is sometimes called the "marginal element". \f$\Delta_f\f$ represents the discrete derivative \f$\Delta_f(e | S) := f(S \cup \left\lbrace e \right\rbrace
- * - f(S))\f$.
- *
- * This (abstract) class provides an interface to implementing submodular functions of any kind.
- */
 namespace exemcl {
+    /**
+     * Submodular functions represent a special kind of set function, which map subsets (usually denoted as \f$S\f$) of some ground set
+     * (denoted by \f$V\f$) to a positive real value (sometimes called the "utility"), whilst maintaining a property of diminishing returns.
+     *
+     * Formally, we have the ground set \f$V \subset \mathbb{R} \f$ and a function \f$f: \mathcal{P}(V) \rightarrow \mathbb{R}^+\f$.
+     * The function \f$f\f$ is now submodular, iff \f$\Delta_f(e \mid A) \geq \Delta_f(e \mid B)\f$ for arbitrary \f$A \subseteq B \subseteq V\f$ and \f$e \in V \setminus B\f$.
+     * The vector \f$e\f$ is sometimes called the "marginal element". \f$\Delta_f\f$ represents the discrete derivative \f$\Delta_f(e | S) := f(S \cup \left\lbrace e \right\rbrace
+     * - f(S))\f$.
+     *
+     * This (abstract) class provides an interface to implementing submodular functions of any kind.
+     */
     class SubmodularFunction {
     public:
         /**
