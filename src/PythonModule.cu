@@ -52,6 +52,9 @@ PYBIND11_MODULE(exemcl, m) {
     py::class_<SubmodularFunction, std::shared_ptr<SubmodularFunction>>(m, "ExemplarClustering")
         .def(py::init<>(&constructFunction), py::arg("ground_set"), py::arg("precision") = "fp32", py::arg("device") = "gpu", py::arg("worker_count") = -1)
         .def("__call__", py::overload_cast<const MatrixX<double>&>(&SubmodularFunction::operator()), py::arg("S"))
+        .def("__call__", py::overload_cast<const MatrixX<double>&, const VectorXRef<double>>(&SubmodularFunction::operator()), py::arg("S"), py::arg("e"))
+        .def("__call__", py::overload_cast<const MatrixX<double>&, const std::vector<VectorXRef<double>>>(&SubmodularFunction::operator()), py::arg("S"), py::arg("e_multi"))
+        .def("__call__", py::overload_cast<const std::vector<MatrixX<double>>&, const VectorXRef<double>>(&SubmodularFunction::operator()), py::arg("S_multi"), py::arg("e"))
         .def("__call__", py::overload_cast<const std::vector<MatrixX<double>>&>(&SubmodularFunction::operator()), py::arg("S_multi"));
 }
 
