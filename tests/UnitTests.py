@@ -1,6 +1,8 @@
+import itertools
 import multiprocessing
 import os
 import random
+import shutil
 import unittest
 
 import exemcl
@@ -32,6 +34,10 @@ def F_gain(V, S, e):
 class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        # Clean test file dir.
+        shutil.rmtree(os.path.join(os.path.dirname(os.path.realpath(__file__)), "testfiles"), ignore_errors=True)
+
+        # Define tolerancies.
         cls.rtol = 1e-02
         cls.atol = 1e-05
 
@@ -63,16 +69,25 @@ class TestCase(unittest.TestCase):
         pool.join()
 
         # Compare to output.
-        exem = exemcl.fp32.ExemplarClustering(V)
-        f_values_exemcl = [exem(s) for s in S]
-        self.assertTrue(np.allclose(np.asarray(f_values), np.asarray(f_values_exemcl), atol=self.atol, rtol=self.rtol))
+        for precision, device in itertools.product(["fp16", "fp32", "fp64"], ["cpu", "gpu"]):
+            # Skip FP16/CPU combination.
+            if precision == "fp16" and device == "cpu":
+                continue
+
+            # Make comparison.
+            exem = exemcl.ExemplarClustering(ground_set=V, precision=precision, device=device, worker_count=-1)
+            f_values_exemcl = exem(S)
+            marginal_values_exemcl = exem(S, e)
+            self.assertTrue(np.allclose(np.asarray(f_values), np.asarray(f_values_exemcl), atol=self.atol, rtol=self.rtol))
+            self.assertTrue(np.allclose(np.asarray(marginal_values), np.asarray(marginal_values_exemcl), atol=self.atol, rtol=self.rtol))
 
         # Write output files.
-        os.makedirs(os.path.join("testfiles", "exem"))
-        V_frame.to_csv(os.path.join("testfiles", "exem", "ground_set.csv"), index_label="ObjectID")
-        subsets_df.reset_index(drop=True).to_csv(os.path.join("testfiles", "exem", "subsets.csv"), index_label="ObjectID")
-        pandas.DataFrame(f_values).to_csv(os.path.join("testfiles", "exem", "f_values.csv"), index_label="ObjectID")
-        pandas.DataFrame(marginal_values).to_csv(os.path.join("testfiles", "exem", "marginal_values.csv"), index_label="ObjectID")
+        out_dir = os.path.dirname(os.path.realpath(__file__))
+        os.makedirs(os.path.join(out_dir, "testfiles", "exem"))
+        V_frame.to_csv(os.path.join(out_dir, "testfiles", "exem", "ground_set.csv"), index_label="ObjectID")
+        subsets_df.reset_index(drop=True).to_csv(os.path.join(out_dir, "testfiles", "exem", "subsets.csv"), index_label="ObjectID")
+        pandas.DataFrame(f_values).to_csv(os.path.join(out_dir, "testfiles", "exem", "f_values.csv"), index_label="ObjectID")
+        pandas.DataFrame(marginal_values).to_csv(os.path.join(out_dir, "testfiles", "exem", "marginal_values.csv"), index_label="ObjectID")
 
 
 if __name__ == '__main__':
