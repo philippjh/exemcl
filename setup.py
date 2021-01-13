@@ -5,6 +5,7 @@ import re
 import subprocess
 import sys
 from distutils.version import LooseVersion
+from os import path
 
 import setuptools
 from setuptools import setup, Extension
@@ -60,13 +61,20 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.', '--target', 'exemcl'] + build_args, cwd=self.build_temp)
 
 
+# Read README.md and ThirdPartyLicenses.md file into memory.
+with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+with open(path.join(path.abspath(path.dirname(__file__)), 'ThirdPartyLicenses.md'), encoding='utf-8') as f:
+    long_description += f.read()
+
 setup(
     name='exemcl',
     version='0.0.1',
     author='Philipp-Jan Honysz',
     author_email='philipp.honysz@udo.edu',
     description='A CUDA implementation for submodular exemplar-clustering.',
-    long_description='',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     ext_modules=[CMakeExtension('exemcl')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,

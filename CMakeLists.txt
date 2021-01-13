@@ -22,6 +22,7 @@ option(BUILD_NATIVE "Should native compilation be used?" ON)
 
 # Include Eigen
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/eigen")
+add_compile_definitions(EIGEN_MPL2_ONLY)
 
 # Include pybind11
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/lib/pybind11")

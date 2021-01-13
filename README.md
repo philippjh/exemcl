@@ -48,4 +48,4 @@ C++ test suite since latter relies on those test files, which were written to di
 
 Part of the work on this paper has been supported by Deutsche Forschungsgemeinschaft (DFG) within the Collaborative Research Center SFB 876 "Providing Information by
 Resource-Constrained Analysis", project A1, http://sfb876.tu-dortmund.de and by the German Competence Center for Machine Learning Rhine Ruhr
-(ML2R, https://www.ml2r.de, 01IS18038A), funded by the German Federal Ministry for Education and Research.  
+(ML2R, https://www.ml2r.de, 01IS18038A), funded by the German Federal Ministry for Education and Research.
