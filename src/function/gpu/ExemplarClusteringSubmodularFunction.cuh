@@ -181,11 +181,11 @@ namespace exemcl::gpu {
          *
          * @param memoryLimit GPU memory limit (in bytes).
          */
-        void setGPUMemoryLimit(long memoryLimit) {
+        void setMemoryLimit(long memoryLimit) override {
             // Subtract the number of bytes we allocated for the V matrix, which, of course, is not available anymore.
             long newMemoryLimit = memoryLimit - _gpuVMatrixMemoryAllocated;
             if (newMemoryLimit < 0)
-                throw std::runtime_error("ExemplarClusteringSubmodularFunction::setGPUMemoryLimit: Inadequate memory limit set. No more memory for function evaluations left. "
+                throw std::runtime_error("ExemplarClusteringSubmodularFunction::setMemoryLimit: Inadequate memory limit set. No more memory for function evaluations left. "
                                          "Please set a higher memory limit.");
             else
                 _gpuMemoryLimit = newMemoryLimit;

@@ -219,6 +219,14 @@ namespace exemcl {
         }
 
         /**
+         * Limits the usable memory by this class. Must be overridden by the implementing class and yields an exception otherwise.
+         * @param memoryLimit Memory limit (in byte).
+         */
+        virtual void setMemoryLimit(long memoryLimit) {
+            throw std::runtime_error("SubmodularFunction::setMemoryLimit: Not implemented.");
+        }
+
+        /**
          * Destructor.
          */
         virtual ~SubmodularFunction() = default;

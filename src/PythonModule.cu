@@ -55,7 +55,8 @@ PYBIND11_MODULE(exemcl, m) {
         .def("__call__", py::overload_cast<const MatrixX<double>&, const VectorXRef<double>>(&SubmodularFunction::operator()), py::arg("S"), py::arg("e"))
         .def("__call__", py::overload_cast<const MatrixX<double>&, const std::vector<VectorXRef<double>>>(&SubmodularFunction::operator()), py::arg("S"), py::arg("e_multi"))
         .def("__call__", py::overload_cast<const std::vector<MatrixX<double>>&, const VectorXRef<double>>(&SubmodularFunction::operator()), py::arg("S_multi"), py::arg("e"))
-        .def("__call__", py::overload_cast<const std::vector<MatrixX<double>>&>(&SubmodularFunction::operator()), py::arg("S_multi"));
+        .def("__call__", py::overload_cast<const std::vector<MatrixX<double>>&>(&SubmodularFunction::operator()), py::arg("S_multi"))
+        .def("set_memory_limit", &SubmodularFunction::setMemoryLimit, py::arg("memory_limit"));
 }
 
 #endif // EXEMCL_PYTHONBINDING_H
