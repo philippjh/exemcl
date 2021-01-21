@@ -1,9 +1,13 @@
 .. |pypibadge| image:: https://img.shields.io/pypi/v/exemcl
     :target: https://pypi.org/project/exemcl/
 
-==================================
-Exemplar-based clustering for GPUs
-==================================
+.. |githubbadge| image:: https://img.shields.io/badge/view-repository-informational
+    :target: https://github.com/philippjh/exemcl
+
+
+================================================
+Exemplar-based clustering for GPUs |githubbadge|
+================================================
 
 This repository provides an CUDA implementation of the *Exemplar-based clustering* submodular function. This GPU algorithm has originally been discussed in:
 
