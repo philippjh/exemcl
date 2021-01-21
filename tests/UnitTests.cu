@@ -155,7 +155,7 @@ TYPED_TEST(GPUTests, ExemplarClusteringChunked) {
 
         // Create submodular function.
         exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, TypeParam> submodularFunction(testData.groundSet.cast<TypeParam>(), 1);
-        submodularFunction.setGPUMemoryLimit(100 * 1024); // 100 KiB
+        submodularFunction.setMemoryLimit(100 * 1024); // 100 KiB
 
         // Run the test function.
         if constexpr (std::is_same<TypeParam, float>::value)
@@ -168,7 +168,7 @@ TYPED_TEST(GPUTests, ExemplarClusteringChunked) {
 
         // Create submodular function.
         exemcl::gpu::ExemplarClusteringSubmodularFunction<TypeParam, float> submodularFunction(testData.groundSet.cast<float>(), 1);
-        submodularFunction.setGPUMemoryLimit(100 * 1024); // 100 KiB
+        submodularFunction.setMemoryLimit(100 * 1024); // 100 KiB
 
         // Run the test function.
         testSubmodularFunction(submodularFunction, testData, FP16_ERROR_TOLERANCY);
