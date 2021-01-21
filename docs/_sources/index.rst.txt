@@ -15,19 +15,6 @@ This repository provides an CUDA implementation of the *Exemplar-based clusterin
 
 The algorithm can both be used from C++ and Python.
 
-
-Install from PyPI (recommended) |pypibadge|
-===========================================
-
-We provide Linux wheel packages for various Python versions, which can be installed like this:
-
-.. code-block::
-
-    pip install exemcl
-
-Windows builds are currently **not** provided. Please resort to installation from source, if you are using Windows.
-
-
 Install Python package from source
 ==================================
 
