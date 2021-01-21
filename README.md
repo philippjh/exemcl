@@ -15,6 +15,8 @@ We provide Linux wheel packages for various Python versions, which can be instal
 pip install exemcl
 ```
 
+This package is built using CUDA 11.2. If you are experiencing driver or library version mismatch errors, please update your CUDA runtime version to be at least 11.2 first.
+
 Windows builds are currently **not** provided. Please resort to installation from source, if you are using Windows.
 
 ## Install from source
