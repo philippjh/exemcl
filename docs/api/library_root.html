@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>C++ API &mdash; Exemplar-based Clustering Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Namespace exemcl" href="namespace_exemcl.html" />
+    <link rel="prev" title="Python API" href="../pythonapi.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Exemplar-based Clustering
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pythonapi.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-api">Full API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="namespace_exemcl.html">Namespace exemcl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_exemcl__cpu.html">Namespace exemcl::cpu</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html">Template Class ExemplarClusteringSubmodularFunction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classexemcl_1_1SubmodularFunction.html">Class SubmodularFunction</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f.html">Typedef exemcl::ConstVectorXRef</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html">Typedef exemcl::MatrixX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_DataTypes_8h_1ab9e8df9c3ced2057b0c19f52531c2e86.html">Typedef exemcl::VectorX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html">Typedef exemcl::VectorXRef</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Exemplar-based Clustering</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>C++ API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/library_root.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="c-api">
+<h1>C++ API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-hierarchy">
+<h2>Class Hierarchy<a class="headerlink" href="#class-hierarchy" title="Permalink to this headline">¶</a></h2>
+<ul class="treeView" id="class-treeView">
+  <li>
+    <ul class="collapsibleList">
+      <li class="lastChild">Namespace <a href="namespace_exemcl.html#namespace-exemcl">exemcl</a><ul><li>Namespace <a href="namespace_exemcl__cpu.html#namespace-exemcl-cpu">exemcl::cpu</a><ul><li class="lastChild">Template Class <a href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html#exhale-class-classexemcl-1-1cpu-1-1ExemplarClusteringSubmodularFunction">ExemplarClusteringSubmodularFunction</a></li></ul></li><li class="lastChild">Class <a href="classexemcl_1_1SubmodularFunction.html#exhale-class-classexemcl-1-1SubmodularFunction">SubmodularFunction</a></li></ul></li>
+    </ul>
+  </li><!-- only tree view element -->
+</ul><!-- /treeView class-treeView --></div>
+<div class="section" id="file-hierarchy">
+<h2>File Hierarchy<a class="headerlink" href="#file-hierarchy" title="Permalink to this headline">¶</a></h2>
+<ul class="treeView" id="file-treeView">
+  <li>
+    <ul class="collapsibleList">
+      <li class="lastChild">Directory <a href="dir_src.html#dir-src">src</a><ul><li>Directory <a href="dir_src_function.html#dir-src-function">function</a><ul><li>Directory <a href="dir_src_function_cpu.html#dir-src-function-cpu">cpu</a><ul><li class="lastChild">File <a href="file_src_function_cpu_ExemplarClusteringSubmodularFunction.h.html#file-src-function-cpu-ExemplarClusteringSubmodularFunction.h">ExemplarClusteringSubmodularFunction.h</a></li></ul></li><li class="lastChild">File <a href="file_src_function_SubmodularFunction.h.html#file-src-function-SubmodularFunction.h">SubmodularFunction.h</a></li></ul></li><li class="lastChild">Directory <a href="dir_src_io.html#dir-src-io">io</a><ul><li class="lastChild">File <a href="file_src_io_DataTypes.h.html#file-src-io-DataTypes.h">DataTypes.h</a></li></ul></li></ul></li>
+    </ul>
+  </li><!-- only tree view element -->
+</ul><!-- /treeView file-treeView --></div>
+<div class="section" id="full-api">
+<h2>Full API<a class="headerlink" href="#full-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="namespaces">
+<h3>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_exemcl.html">Namespace exemcl</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_exemcl.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_exemcl.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_exemcl.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_exemcl__cpu.html">Namespace exemcl::cpu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_exemcl__cpu.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="classes-and-structs">
+<h3>Classes and Structs<a class="headerlink" href="#classes-and-structs" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html">Template Class ExemplarClusteringSubmodularFunction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classexemcl_1_1SubmodularFunction.html">Class SubmodularFunction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classexemcl_1_1SubmodularFunction.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classexemcl_1_1SubmodularFunction.html#derived-type">Derived Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classexemcl_1_1SubmodularFunction.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="typedefs">
+<h3>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f.html">Typedef exemcl::ConstVectorXRef</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html">Typedef exemcl::MatrixX</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_DataTypes_8h_1ab9e8df9c3ced2057b0c19f52531c2e86.html">Typedef exemcl::VectorX</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_DataTypes_8h_1ab9e8df9c3ced2057b0c19f52531c2e86.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html">Typedef exemcl::VectorXRef</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="namespace_exemcl.html" class="btn btn-neutral float-right" title="Namespace exemcl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../pythonapi.html" class="btn btn-neutral float-left" title="Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright .
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

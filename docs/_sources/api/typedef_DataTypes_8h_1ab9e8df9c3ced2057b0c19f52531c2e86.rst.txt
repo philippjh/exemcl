@@ -1,0 +1,13 @@
+.. _exhale_typedef_DataTypes_8h_1ab9e8df9c3ced2057b0c19f52531c2e86:
+
+Typedef exemcl::VectorX
+=======================
+
+- Defined in :ref:`file_src_io_DataTypes.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: exemcl::VectorX

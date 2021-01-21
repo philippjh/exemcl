@@ -1,0 +1,55 @@
+
+Full API
+--------
+
+Namespaces
+**********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_exemcl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_exemcl__cpu.rst
+
+Classes and Structs
+*******************
+
+
+.. toctree::
+   :maxdepth: 5
+
+   classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classexemcl_1_1SubmodularFunction.rst
+
+Typedefs
+********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_DataTypes_8h_1ab9e8df9c3ced2057b0c19f52531c2e86.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.rst

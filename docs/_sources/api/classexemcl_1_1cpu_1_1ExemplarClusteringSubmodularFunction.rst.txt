@@ -1,0 +1,25 @@
+.. _exhale_class_classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction:
+
+Template Class ExemplarClusteringSubmodularFunction
+===================================================
+
+- Defined in :ref:`file_src_function_cpu_ExemplarClusteringSubmodularFunction.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public exemcl::SubmodularFunction`` (:ref:`exhale_class_classexemcl_1_1SubmodularFunction`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: exemcl::cpu::ExemplarClusteringSubmodularFunction
+   :members:
+   :protected-members:
+   :undoc-members:

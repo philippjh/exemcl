@@ -1,0 +1,18 @@
+
+File Hierarchy
+--------------
+
+
+.. raw:: html
+
+   <ul class="treeView" id="file-treeView">
+     <li>
+       <ul class="collapsibleList">
+         <li class="lastChild">Directory <a href="dir_src.html#dir-src">src</a><ul><li>Directory <a href="dir_src_function.html#dir-src-function">function</a><ul><li>Directory <a href="dir_src_function_cpu.html#dir-src-function-cpu">cpu</a><ul><li class="lastChild">File <a href="file_src_function_cpu_ExemplarClusteringSubmodularFunction.h.html#file-src-function-cpu-ExemplarClusteringSubmodularFunction.h">ExemplarClusteringSubmodularFunction.h</a></li></ul></li><li class="lastChild">File <a href="file_src_function_SubmodularFunction.h.html#file-src-function-SubmodularFunction.h">SubmodularFunction.h</a></li></ul></li><li class="lastChild">Directory <a href="dir_src_io.html#dir-src-io">io</a><ul><li class="lastChild">File <a href="file_src_io_DataTypes.h.html#file-src-io-DataTypes.h">DataTypes.h</a></li></ul></li></ul></li>
+       </ul>
+     </li><!-- only tree view element -->
+   </ul><!-- /treeView file-treeView -->
+
+.. end raw html for treeView
+
+

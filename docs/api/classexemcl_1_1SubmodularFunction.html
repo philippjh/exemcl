@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Class SubmodularFunction &mdash; Exemplar-based Clustering Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Typedef exemcl::ConstVectorXRef" href="typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f.html" />
+    <link rel="prev" title="Template Class ExemplarClusteringSubmodularFunction" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Exemplar-based Clustering
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pythonapi.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library_root.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Exemplar-based Clustering</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="library_root.html">C++ API</a> &raquo;</li>
+        
+      <li>Class SubmodularFunction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/classexemcl_1_1SubmodularFunction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="class-submodularfunction">
+<span id="exhale-class-classexemcl-1-1submodularfunction"></span><h1>Class SubmodularFunction<a class="headerlink" href="#class-submodularfunction" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_src_function_SubmodularFunction.h.html#file-src-function-submodularfunction-h"><span class="std std-ref">File SubmodularFunction.h</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="derived-type">
+<h3>Derived Type<a class="headerlink" href="#derived-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">exemcl::cpu::ExemplarClusteringSubmodularFunction&lt;</span> <span class="pre">HostDataType</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html#exhale-class-classexemcl-1-1cpu-1-1exemplarclusteringsubmodularfunction"><span class="std std-ref">Template Class ExemplarClusteringSubmodularFunction</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionE">
+<span class="target" id="classexemcl_1_1SubmodularFunction"></span><em class="property">class </em><code class="sig-prename descclassname">exemcl<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">SubmodularFunction</code><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Submodular functions represent a special kind of set function, which map subsets (usually denoted as <span class="math notranslate nohighlight">\(S\)</span>) of some ground set (denoted by <span class="math notranslate nohighlight">\(V\)</span>) to a positive real value (sometimes called the “utility”), whilst maintaining a property of diminishing returns.</p>
+<p>Formally, we have the ground set <span class="math notranslate nohighlight">\(V \subset \mathbb{R} \)</span> and a function <span class="math notranslate nohighlight">\(f: \mathcal{P}(V) \rightarrow \mathbb{R}^+\)</span>. The function <span class="math notranslate nohighlight">\(f\)</span> is now submodular, iff <span class="math notranslate nohighlight">\(\Delta_f(e \mid A) \geq \Delta_f(e \mid B)\)</span> for arbitrary <span class="math notranslate nohighlight">\(A \subseteq B \subseteq V\)</span> and <span class="math notranslate nohighlight">\(e \in V \setminus B\)</span>. The vector <span class="math notranslate nohighlight">\(e\)</span> is sometimes called the “marginal element”. <span class="math notranslate nohighlight">\(\Delta_f\)</span> represents the discrete derivative <span class="math notranslate nohighlight">\(\Delta_f(e | S) := f(S \cup \left\lbrace e \right\rbrace - f(S))\)</span>.</p>
+<p>This (abstract) class provides an interface to implementing submodular functions of any kind. </p>
+<p>Subclassed by <a class="reference internal" href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html#classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction"><span class="std std-ref">exemcl::cpu::ExemplarClusteringSubmodularFunction&lt; HostDataType &gt;</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunction18SubmodularFunctionEi">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a7aa9d7d4d1c1a9ec3bff33f8fb288ec1"></span><code class="sig-name descname">SubmodularFunction</code><span class="sig-paren">(</span>int <em>workerCount</em> = -1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunction18SubmodularFunctionEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Provides a base constructor, which updates the worker count of the submodular function. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">workerCount</span></code>: The number of workers to employ (defaults to -1, i.e. all available cores). </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6exemcl18SubmodularFunctionclERK7MatrixXIdE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a5a9ba56d8f007ff63bee3e4ce8611dee"></span>double <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt; &amp;<em>S</em><span class="sig-paren">)</span> <em class="property">const</em> = 0<a class="headerlink" href="#_CPPv4NK6exemcl18SubmodularFunctionclERK7MatrixXIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the submodular function value for a set.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>The submodular function value <span class="math notranslate nohighlight">\(f(S)\)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S</span></code>: Set of vectors, to calculate the submodular function for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionclERK7MatrixXIdE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a96fee28ffbc8ca056371206a3d829600"></span>double <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt; &amp;<em>S</em><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionclERK7MatrixXIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the submodular function value for a set.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>The submodular function value <span class="math notranslate nohighlight">\(f(S)\)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S</span></code>: Set of vectors, to calculate the submodular function for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6exemcl18SubmodularFunctionclERK7MatrixXIdE10VectorXRefIdE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a7b8f8cc5edb24825c412f38ef04bd283"></span>double <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt; &amp;<em>S</em>, <a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#_CPPv4I0EN6exemcl10VectorXRefE" title="exemcl::VectorXRef">VectorXRef</a>&lt;double&gt; <em>elem</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6exemcl18SubmodularFunctionclERK7MatrixXIdE10VectorXRefIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the marginal gain of the submodular function, w.r.t to <span class="math notranslate nohighlight">\(S\)</span> and a marginal element <span class="math notranslate nohighlight">\(e\)</span>. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>The marginal gain of the <span class="math notranslate nohighlight">\(f(S) - f(S \cup \left\{elem\right\})\)</span> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S</span></code>: Set of vectors, to calculate the submodular function for. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elem</span></code>: A marginal element. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionclERK7MatrixXIdE10VectorXRefIdE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1ada34d9bf87ea0ba0a21b15298ac641c9"></span>double <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt; &amp;<em>S</em>, <a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#_CPPv4I0EN6exemcl10VectorXRefE" title="exemcl::VectorXRef">VectorXRef</a>&lt;double&gt; <em>elem</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionclERK7MatrixXIdE10VectorXRefIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the marginal gain of the submodular function, w.r.t to <span class="math notranslate nohighlight">\(S\)</span> and a marginal element <span class="math notranslate nohighlight">\(e\)</span>. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>The marginal gain of the <span class="math notranslate nohighlight">\(f(S) - f(S \cup \left\{elem\right\})\)</span> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S</span></code>: Set of vectors, to calculate the submodular function for. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elem</span></code>: A marginal element. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a6656463ff732b43e22df505de7985aa7"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt;&gt; &amp;<em>S_multi</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the submodular function for more than one set.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A set of utility values <span class="math notranslate nohighlight">\(\left\{f(S_1), ..., f(S_n)\right\}\)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S_multi</span></code>: A set of sets <span class="math notranslate nohighlight">\( S = \left\{S_1, ..., S_n\right\}\)</span>, which should be evaluated using the submodular function. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a77784b1324403e9ac02e92873e923523"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt;&gt; &amp;<em>S_multi</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the submodular function for more than one set.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A set of utility values <span class="math notranslate nohighlight">\(\left\{f(S_1), ..., f(S_n)\right\}\)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S_multi</span></code>: A set of sets <span class="math notranslate nohighlight">\( S = \left\{S_1, ..., S_n\right\}\)</span>, which should be evaluated using the submodular function. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE10VectorXRefIdE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a76d6f7690d5a2d41861c2eedec98cc8d"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt;&gt; &amp;<em>S_multi</em>, <a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#_CPPv4I0EN6exemcl10VectorXRefE" title="exemcl::VectorXRef">VectorXRef</a>&lt;double&gt; <em>elem</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE10VectorXRefIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the marginal gain for a multi set and a marginal element.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A set of marginal gain values <span class="math notranslate nohighlight">\(\Delta_f(e | S_1), ..., \Delta_f(e | S_n) \)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S_multi</span></code>: A set of sets <span class="math notranslate nohighlight">\( S = \left\{S_1, ..., S_n\right\} \)</span>, which should be evaluated using the submodular function. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elem</span></code>: A marginal element <span class="math notranslate nohighlight">\( e \)</span>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE10VectorXRefIdE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a784619659a954836e6ef1de9e2541708"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt;&gt; &amp;<em>S_multi</em>, <a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#_CPPv4I0EN6exemcl10VectorXRefE" title="exemcl::VectorXRef">VectorXRef</a>&lt;double&gt; <em>elem</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionclERKNSt6vectorI7MatrixXIdEEE10VectorXRefIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the marginal gain for a multi set and a marginal element.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A set of marginal gain values <span class="math notranslate nohighlight">\(\Delta_f(e | S_1), ..., \Delta_f(e | S_n) \)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S_multi</span></code>: A set of sets <span class="math notranslate nohighlight">\( S = \left\{S_1, ..., S_n\right\} \)</span>, which should be evaluated using the submodular function. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elem</span></code>: A marginal element <span class="math notranslate nohighlight">\( e \)</span>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6exemcl18SubmodularFunctionclERK7MatrixXIdENSt6vectorI10VectorXRefIdEEE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a1a0b3b2d4c7b7e3d7244a3ee5cfd7f2c"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt; &amp;<em>S</em>, std::vector&lt;<a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#_CPPv4I0EN6exemcl10VectorXRefE" title="exemcl::VectorXRef">VectorXRef</a>&lt;double&gt;&gt; <em>elems</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6exemcl18SubmodularFunctionclERK7MatrixXIdENSt6vectorI10VectorXRefIdEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the marginal gain for a single set <span class="math notranslate nohighlight">\(S\)</span> and a set of marginal vectors.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A set of marginal gain values <span class="math notranslate nohighlight">\(\Delta_f(e_1 | S), ..., \Delta_f(e_n | S) \)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S</span></code>: Set of vectors, which should be used to calculate the marginal value in conjunction with <code class="docutils literal notranslate"><span class="pre">elems</span></code>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elems</span></code>: A set of marginal vectors <span class="math notranslate nohighlight">\( \left\{e_1, ..., e_n \right\}\)</span>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionclERK7MatrixXIdENSt6vectorI10VectorXRefIdEEE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a23b44109ec708b7589de48aed045d7b5"></span>std::vector&lt;double&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda.html#_CPPv4I0_N5Eigen14StorageOptionsEEN6exemcl7MatrixXE" title="exemcl::MatrixX">MatrixX</a>&lt;double&gt; &amp;<em>S</em>, std::vector&lt;<a class="reference internal" href="typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958.html#_CPPv4I0EN6exemcl10VectorXRefE" title="exemcl::VectorXRef">VectorXRef</a>&lt;double&gt;&gt; <em>elems</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionclERK7MatrixXIdENSt6vectorI10VectorXRefIdEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the marginal gain for a single set <span class="math notranslate nohighlight">\(S\)</span> and a set of marginal vectors.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A set of marginal gain values <span class="math notranslate nohighlight">\(\Delta_f(e_1 | S), ..., \Delta_f(e_n | S) \)</span>. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S</span></code>: Set of vectors, which should be used to calculate the marginal value in conjunction with <code class="docutils literal notranslate"><span class="pre">elems</span></code>. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elems</span></code>: A set of marginal vectors <span class="math notranslate nohighlight">\( \left\{e_1, ..., e_n \right\}\)</span>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6exemcl18SubmodularFunction14getWorkerCountEv">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1ae4f29671ba558bbfc77aede2c9f923d4"></span>unsigned int <code class="sig-name descname">getWorkerCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6exemcl18SubmodularFunction14getWorkerCountEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the worker count, which is currently assigned to this submodular function. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Worker count. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunction14setWorkerCountEi">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a5577a364c5dc6b5e7f35876037ea93e7"></span>void <code class="sig-name descname">setWorkerCount</code><span class="sig-paren">(</span>int <em>workerCount</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunction14setWorkerCountEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Updates the worker count for the submodular function. If the supplied value is below one, the function will try to update the worker count to the number of cores available to the program.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">workerCount</span></code>: New worker count. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunction14setMemoryLimitEl">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1ab2ec5866bd331eb3e517bd02215ead02"></span>void <code class="sig-name descname">setMemoryLimit</code><span class="sig-paren">(</span>long <em>memoryLimit</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunction14setMemoryLimitEl" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Limits the usable memory by this class. Must be overridden by the implementing class and yields an exception otherwise. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">memoryLimit</span></code>: Memory limit (in byte). </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6exemcl18SubmodularFunctionD0Ev">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1a7b11fdd3008e2be2a0570ce30a7d61d1"></span><code class="sig-name descname">~SubmodularFunction</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunctionD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destructor. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Attributes</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6exemcl18SubmodularFunction12_workerCountE">
+<span class="target" id="classexemcl_1_1SubmodularFunction_1ab5a8e15e182112b140ff4e765a31a1c3"></span>unsigned int <code class="sig-name descname">_workerCount</code> = 1<a class="headerlink" href="#_CPPv4N6exemcl18SubmodularFunction12_workerCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f.html" class="btn btn-neutral float-right" title="Typedef exemcl::ConstVectorXRef" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction.html" class="btn btn-neutral float-left" title="Template Class ExemplarClusteringSubmodularFunction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright .
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

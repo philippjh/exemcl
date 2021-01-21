@@ -1,0 +1,191 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Quick Start"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Instantiate a NumPy array, which holds the ground set $V$: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import datetime\n",
+    "\n",
+    "np.random.seed(42)\n",
+    "def timed(f, *args):\n",
+    "    tStart = datetime.datetime.now()\n",
+    "    res = f(*args)\n",
+    "    tEnd = datetime.datetime.now()\n",
+    "    return res, (tEnd - tStart).total_seconds()\n",
+    "\n",
+    "N = 25000\n",
+    "d = 50\n",
+    "V = np.random.random((N, d))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We will now select a random subset $S \\subset V$ and evaluate its function value on the GPU using the `ExemplarClustering` class provided by the `exemcl` package:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from exemcl import ExemplarClustering\n",
+    "\n",
+    "S = np.take(V, np.random.choice(V.shape[0], size=5000, replace=False), axis=0)\n",
+    "exem = ExemplarClustering(ground_set=V, device=\"gpu\")\n",
+    "fvalue = exem(S)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Change precision"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It is also possible to change the required floating point precision to either half, single or double precision by adding the `precision` parameter during construction and specifying `fp16`, `fp32` or `fp64`, respectively:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Function value (fp16): 13.42227840423584 (took 0.162379s).\n",
+      "Function value (fp32): 13.4232816696167 (took 0.178826s).\n",
+      "Function value (fp64): 13.423275558060581 (took 3.193418s).\n"
+     ]
+    }
+   ],
+   "source": [
+    "for fp in [\"fp16\", \"fp32\", \"fp64\"]:\n",
+    "    exem = ExemplarClustering(ground_set=V, device=\"gpu\", precision=fp)\n",
+    "    fvalue, secs = timed(exem.__call__, S)\n",
+    "    print(f\"Function value ({fp}): {fvalue} (took {secs}s).\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Multi-set evaluation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "If you are using Exemplar-based clustering as target function for optimization, e.g. using the Greedy routine, you might want to evaluate more than one set per (optimization) step. We will now create a *list* of subsets, which we will evaluate for their function value:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Sample a set of 100 sets with 5000 vectors each, which should be evaluated for their function value.\n",
+    "S_multi = [np.take(V, np.random.choice(V.shape[0], size=5000, replace=False), axis=0) for _ in range(100)]\n",
+    "exem = ExemplarClustering(ground_set=V)\n",
+    "fvalues, secs = timed(exem.__call__, S_multi)\n",
+    "print(f\"{len(fvalues)} function values found (took {secs}s).\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Alternatively, you might have some fixed set $S$ and you are looking for marginal gains resulting from marginal elements $E = \\left\\lbrace e_1, ..., e_n \\right\\rbrace$. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Sample a set of 100 vectors, which with S should be evaluated for their respective marginal function values.\n",
+    "e_multi = [np.take(V, np.random.choice(V.shape[0], size=1, replace=False), axis=0).flatten() for _ in range(100)]\n",
+    "exem = ExemplarClustering(ground_set=V)\n",
+    "marginals, secs = timed(exem.__call__, S, e_multi)\n",
+    "print(f\"{len(marginals)} marginal function values found (took {secs}s).\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## CPU computation "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You might be also interested in using a CPU-only version of this algorithm. In this case you can simply replace `device=gpu` with `device=cpu`. Please keep in mind, that FP16 operation is not available for CPU devices."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import datetime\n",
+    "\n",
+    "for fp in [\"fp32\", \"fp64\"]:\n",
+    "    exem = ExemplarClustering(ground_set=V, device=\"cpu\", precision=fp)\n",
+    "    fvalue, secs = timed(exem.__call__, S)\n",
+    "    print(f\"Function value ({fp}): {fvalue} (took {secs}s).\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

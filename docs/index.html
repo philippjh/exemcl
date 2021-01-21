@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Exemplar-based clustering for GPUs &mdash; Exemplar-based Clustering Documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> Exemplar-based Clustering
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonapi.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/library_root.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Exemplar-based Clustering</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Exemplar-based clustering for GPUs </li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="exemplar-based-clustering-for-gpus-githubbadge">
+<h1>Exemplar-based clustering for GPUs <a class="reference external" href="https://github.com/philippjh/exemcl"><img alt="githubbadge" src="https://img.shields.io/badge/view-repository-informational" /></a><a class="headerlink" href="#exemplar-based-clustering-for-gpus-githubbadge" title="Permalink to this headline">¶</a></h1>
+<p>This repository provides an CUDA implementation of the <em>Exemplar-based clustering</em> submodular function. This GPU algorithm has originally been discussed in:</p>
+<blockquote>
+<div><p>TBA.</p>
+</div></blockquote>
+<p>The algorithm can both be used from C++ and Python.</p>
+<div class="section" id="install-from-pypi-recommended-pypibadge">
+<h2>Install from PyPI (recommended) <a class="reference external" href="https://pypi.org/project/exemcl/"><img alt="pypibadge" src="https://img.shields.io/pypi/v/exemcl" /></a><a class="headerlink" href="#install-from-pypi-recommended-pypibadge" title="Permalink to this headline">¶</a></h2>
+<p>We provide Linux wheel packages for various Python versions, which can be installed like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">exemcl</span>
+</pre></div>
+</div>
+<p>Windows builds are currently <strong>not</strong> provided. Please resort to installation from source, if you are using Windows.</p>
+</div>
+<div class="section" id="install-python-package-from-source">
+<h2>Install Python package from source<a class="headerlink" href="#install-python-package-from-source" title="Permalink to this headline">¶</a></h2>
+<p>The following requirements have to be met in order to build this package from source:</p>
+<ul class="simple">
+<li><p>A CUDA compliant GPU with compute capability 5.3 or newer (NVIDIA Pascal architecture or newer).</p></li>
+<li><p>NVCC &gt;= 11.2.67 (older versions may work, however, at least CUDA 11 is required since C++17 compiler support is <strong>mandatory</strong>.)</p></li>
+<li><p>CMake &gt;= 3.13</p></li>
+<li><p>OpenMP</p></li>
+</ul>
+<p>Building is then conducted by following these steps:</p>
+<ol class="arabic simple">
+<li><p>Recursively clone this repository by issueing <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">--recurse-submodules</span> <span class="pre">git&#64;github.com:philippjh/exemcl.git</span></code></p></li>
+<li><p>Change your working directory to the root of the repository. Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code></p></li>
+<li><p>The Python package manager will now build and install the package.</p></li>
+</ol>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+<div class="section" id="running-the-test-suite">
+<h1>Running the test suite<a class="headerlink" href="#running-the-test-suite" title="Permalink to this headline">¶</a></h1>
+<p>This package provides two test suites: The first test suite confirms correct operation of the library within Python and writes a set of test files to disk. The second test suite
+confirms correct operation of the library within C++ and is intended to provide extensive information on code coverage. It is <strong>required</strong> to run the Python test suite prior to the
+C++ test suite since latter relies on those test files, which were written to disk by the Python test suite. Hence, to run both test suites follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Recursively clone this repository by issuing <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">--recurse-submodules</span> <span class="pre">git&#64;github.com:philippjh/exemcl.git</span></code></p></li>
+<li><p>Change your working directory to the root of the repository. Run <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">tests/UnitTests.py</span></code>. Verify, that a <code class="docutils literal notranslate"><span class="pre">testfiles</span></code> directory has been written to the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder.</p></li>
+<li><p><em>(Optional, if you want to run the C++ test suite)</em>: Create a build directory, e.g. by issuing <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">build</span></code> from the repository root directory and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into that folder.</p></li>
+<li><p>Create the required Makefiles by running <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">-DCMAKE_BUILD_TYPE=Release</span> <span class="pre">..</span></code>. Replace <code class="docutils literal notranslate"><span class="pre">Release</span></code> with <code class="docutils literal notranslate"><span class="pre">Debug</span></code> if you are interested in coverage data.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">make</span></code>. Once building has finished, you can perform the C++ tests by running the <code class="docutils literal notranslate"><span class="pre">exemcl-tests</span></code> executable.</p></li>
+</ol>
+<div class="section" id="acknowledgments">
+<h2>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h2>
+<p>Part of the work on this paper has been supported by Deutsche Forschungsgemeinschaft (DFG) within the Collaborative Research Center SFB 876 “Providing Information by
+Resource-Constrained Analysis”, project A1, <a class="reference external" href="http://sfb876.tu-dortmund.de">http://sfb876.tu-dortmund.de</a> and by the German Competence Center for Machine Learning Rhine Ruhr
+(ML2R, <a class="reference external" href="https://www.ml2r.de">https://www.ml2r.de</a>, 01IS18038A), funded by the German Federal Ministry for Education and Research.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright .
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

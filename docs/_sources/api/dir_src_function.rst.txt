@@ -1,0 +1,25 @@
+.. _dir_src_function:
+
+
+Directory function
+==================
+
+
+|exhale_lsh| :ref:`Parent directory <dir_src>` (``src``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``src/function``
+
+Subdirectories
+--------------
+
+- :ref:`dir_src_function_cpu`
+
+
+Files
+-----
+
+- :ref:`file_src_function_SubmodularFunction.h`
+
+

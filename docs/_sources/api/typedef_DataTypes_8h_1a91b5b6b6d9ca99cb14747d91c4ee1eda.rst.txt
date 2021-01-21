@@ -1,0 +1,13 @@
+.. _exhale_typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda:
+
+Typedef exemcl::MatrixX
+=======================
+
+- Defined in :ref:`file_src_io_DataTypes.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: exemcl::MatrixX

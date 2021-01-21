@@ -1,0 +1,48 @@
+:orphan:
+
+
+Full API
+========
+
+Directories
+***********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_function.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_function_cpu.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_src_io.rst
+
+Files
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_io_DataTypes.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_function_cpu_ExemplarClusteringSubmodularFunction.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_src_function_SubmodularFunction.h.rst

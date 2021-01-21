@@ -1,0 +1,20 @@
+
+.. _namespace_exemcl__cpu:
+
+Namespace exemcl::cpu
+=====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classexemcl_1_1cpu_1_1ExemplarClusteringSubmodularFunction`

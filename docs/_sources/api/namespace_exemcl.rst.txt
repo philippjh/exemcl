@@ -1,0 +1,40 @@
+
+.. _namespace_exemcl:
+
+Namespace exemcl
+================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_exemcl__cpu`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classexemcl_1_1SubmodularFunction`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_DataTypes_8h_1a4e5e06c1a3b42c99591dc8914389145f`
+
+- :ref:`exhale_typedef_DataTypes_8h_1a91b5b6b6d9ca99cb14747d91c4ee1eda`
+
+- :ref:`exhale_typedef_DataTypes_8h_1ab9e8df9c3ced2057b0c19f52531c2e86`
+
+- :ref:`exhale_typedef_DataTypes_8h_1a6cd772857864f8fd5bbc6c79ded44958`
