@@ -1,4 +1,4 @@
-# Exemplar-based clustering for GPUs [![Read Manual](https://img.shields.io/badge/read-manual-informational)](https://philippjh.github.io/exemcl/) [![PyPI](https://img.shields.io/pypi/v/exemcl)](https://pypi.org/project/exemcl/) [![PyPI - Format](https://img.shields.io/pypi/format/exemcl)](https://pypi.org/project/exemcl/)
+# Exemplar-based clustering for GPUs [![Read Manual](https://img.shields.io/badge/read-manual-informational)](https://philippjh.github.io/exemcl/)
 
 This repository provides an CUDA implementation of the *Exemplar-based clustering* submodular function. This GPU algorithm has originally been discussed in:
 
@@ -6,18 +6,6 @@ This repository provides an CUDA implementation of the *Exemplar-based clusterin
 
 The algorithm can both be used from C++ and Python. More information on this package, including a quick start guide and how to use this within C++, is
 given [here](https://philippjh.github.io/exemcl/).
-
-## Install from the Python Package Index (PyPI, recommended)
-
-We provide Linux wheel packages for various Python versions, which can be installed like this:
-
-```
-pip install exemcl
-```
-
-This package is built using CUDA 11.2. If you are experiencing driver or library version mismatch errors, please update your CUDA runtime version to be at least 11.2 first.
-
-Windows builds are currently **not** provided. Please resort to installation from source, if you are using Windows.
 
 ## Install from source
 
