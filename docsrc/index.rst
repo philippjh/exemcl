@@ -11,7 +11,7 @@ Exemplar-based clustering for GPUs |githubbadge|
 
 This repository provides an CUDA implementation of the *Exemplar-based clustering* submodular function. This GPU algorithm has originally been discussed in:
 
-    TBA.
+    Philipp-Jan Honysz, Sebastian Buschjäger, & Katharina Morik. (2021). GPU-Accelerated Optimizer-Aware Evaluation of Submodular Exemplar Clustering.
 
 The algorithm can both be used from C++ and Python.
 
