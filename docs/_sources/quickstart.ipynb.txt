@@ -78,9 +78,9 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Function value (fp16): 13.42227840423584 (took 0.162379s).\n",
-      "Function value (fp32): 13.4232816696167 (took 0.178826s).\n",
-      "Function value (fp64): 13.423275558060581 (took 3.193418s).\n"
+      "Function value (fp16): 13.42227840423584 (took 0.166322s).\n",
+      "Function value (fp32): 13.4232816696167 (took 0.179814s).\n",
+      "Function value (fp64): 13.423275558060581 (took 3.023624s).\n"
      ]
     }
    ],
@@ -107,9 +107,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 4,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "100 function values found (took 10.662428s).\n"
+     ]
+    }
+   ],
    "source": [
     "# Sample a set of 100 sets with 5000 vectors each, which should be evaluated for their function value.\n",
     "S_multi = [np.take(V, np.random.choice(V.shape[0], size=5000, replace=False), axis=0) for _ in range(100)]\n",
@@ -127,9 +135,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 5,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "100 marginal function values found (took 10.44639s).\n"
+     ]
+    }
+   ],
    "source": [
     "# Sample a set of 100 vectors, which with S should be evaluated for their respective marginal function values.\n",
     "e_multi = [np.take(V, np.random.choice(V.shape[0], size=1, replace=False), axis=0).flatten() for _ in range(100)]\n",
@@ -154,12 +170,19 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 6,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Function value (fp32): 13.423282623291016 (took 2.068594s).\n",
+      "Function value (fp64): 13.423275558060581 (took 2.436802s).\n"
+     ]
+    }
+   ],
    "source": [
-    "import datetime\n",
-    "\n",
     "for fp in [\"fp32\", \"fp64\"]:\n",
     "    exem = ExemplarClustering(ground_set=V, device=\"cpu\", precision=fp)\n",
     "    fvalue, secs = timed(exem.__call__, S)\n",
